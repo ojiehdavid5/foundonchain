@@ -1,19 +1,29 @@
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.13;
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
 
-import {Script, console} from "forge-std/Script.sol";
-import {Counter} from "../src/Counter.sol";
+import "forge-std/Script.sol";
+import "../src/Escrow.sol";
 
-contract CounterScript is Script {
-    Counter public counter;
+contract DeployEscrowScript is Script {
+    function run() external {
+        // Load deployer's private key from .env or CLI
+        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
 
-    function setUp() public {}
+        // Start broadcasting transactions
+        vm.startBroadcast(deployerPrivateKey);
 
-    function run() public {
-        vm.startBroadcast();
+        // Replace with test addresses
+        address seller = vm.addr(1);   // generates a test address
+        address arbiter = vm.addr(2);  // another test address
 
-        counter = new Counter();
+        // Deploy with 1 ETH value
+        Escrow escrow = (new Escrow){value: 1 ether}(seller, arbiter);
 
         vm.stopBroadcast();
+
+        console2.log("Escrow deployed to:", address(escrow));
+        console2.log("Buyer:", msg.sender);
+        console2.log("Seller:", seller);
+        console2.log("Arbiter:", arbiter);
     }
 }
