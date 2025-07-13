@@ -14,6 +14,7 @@ contract Escrow {
         arbiter = _arbiter;
         amount = msg.value;
         isReleased = false;
+
     }
 
     function release() external {
